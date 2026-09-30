@@ -4,51 +4,65 @@ on:
   push:
     branches:
       - main
+
   pull_request:
     branches:
       - main
 
 jobs:
-  build:
+  frontend:
+    name: Frontend CI
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Frontend
-      - name: Setup Node.js for Frontend
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Install Frontend Dependencies
-        working-directory: frontend
+      - name: Install frontend dependencies
         run: npm ci
 
-      - name: Build React Application
-        working-directory: frontend
+      - name: Lint frontend
+        run: npm run lint
+
+      - name: Build React application
         run: npm run build
 
-      # Backend
-      - name: Setup Node.js for Backend
+      - name: Build frontend Docker image
+        run: docker build -t eduvista-frontend:${{ github.sha }} .
+
+
+  backend:
+    name: Backend CI
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: backend/package-lock.json
 
-      - name: Install Backend Dependencies
-        working-directory: backend
+      - name: Install backend dependencies
         run: npm ci
 
-      # Docker
-      - name: Build Frontend Docker Image
-        working-directory: frontend
-        run: docker build -t eduvista-frontend:${{ github.sha }} .
-
-      - name: Build Backend Docker Image
-        working-directory: backend
+      - name: Build backend Docker image
         run: docker build -t eduvista-backend:${{ github.sha }} .
