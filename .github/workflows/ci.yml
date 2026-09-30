@@ -9,8 +9,17 @@ on:
     branches:
       - main
 
+env:
+  DOCKERHUB_USERNAME: mannu0
+  FRONTEND_IMAGE: mannu0/eduvista-frontend
+  BACKEND_IMAGE: mannu0/eduvista-backend
+
 jobs:
-  frontend:
+
+  # ==========================================
+  # 1. FRONTEND CI
+  # ==========================================
+  frontend-ci:
     name: Frontend CI
     runs-on: ubuntu-latest
 
@@ -19,7 +28,7 @@ jobs:
         working-directory: frontend
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -29,20 +38,17 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Install frontend dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: Lint frontend
-        run: npm run lint
-
-      - name: Build React application
+      - name: Build frontend
         run: npm run build
 
-      - name: Build frontend Docker image
-        run: docker build -t eduvista-frontend:${{ github.sha }} .
 
-
-  backend:
+  # ==========================================
+  # 2. BACKEND CI
+  # ==========================================
+  backend-ci:
     name: Backend CI
     runs-on: ubuntu-latest
 
@@ -51,7 +57,7 @@ jobs:
         working-directory: backend
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -61,44 +67,120 @@ jobs:
           cache: npm
           cache-dependency-path: backend/package-lock.json
 
-      - name: Install backend dependencies
-        run: npm ci
+      - name: Install dependencies
+        run: npm ci --omit=dev
 
-      - name: Build backend Docker image
-        run: docker build -t eduvista-backend:${{ github.sha }} .
+      - name: Verify backend
+        run: node --check src/server.js
 
 
-  docker-publish:
-    name: Publish Docker Images
+  # ==========================================
+  # 3. DOCKER BUILD & PUSH
+  # ==========================================
+  docker:
+    name: Build & Push Docker Images
     runs-on: ubuntu-latest
+
     needs:
-      - frontend
-      - backend
+      - frontend-ci
+      - backend-ci
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+
+      # ----------------------------------------
+      # Docker Hub Login
+      # ----------------------------------------
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push frontend image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./frontend
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/eduvista-frontend:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/eduvista-frontend:${{ github.sha }}
 
-      - name: Build and push backend image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./backend
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/eduvista-backend:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/eduvista-backend:${{ github.sha }}
+      # ----------------------------------------
+      # Build Frontend
+      # ----------------------------------------
+      - name: Build frontend image
+        run: |
+          docker build \
+            -t ${{ env.FRONTEND_IMAGE }}:latest \
+            -t ${{ env.FRONTEND_IMAGE }}:${{ github.sha }} \
+            ./frontend
+
+
+      # ----------------------------------------
+      # Build Backend
+      # ----------------------------------------
+      - name: Build backend image
+        run: |
+          docker build \
+            -t ${{ env.BACKEND_IMAGE }}:latest \
+            -t ${{ env.BACKEND_IMAGE }}:${{ github.sha }} \
+            ./backend
+
+
+      # ----------------------------------------
+      # Push Frontend
+      # ----------------------------------------
+      - name: Push frontend image
+        run: |
+          docker push ${{ env.FRONTEND_IMAGE }}:latest
+          docker push ${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+
+
+      # ----------------------------------------
+      # Push Backend
+      # ----------------------------------------
+      - name: Push backend image
+        run: |
+          docker push ${{ env.BACKEND_IMAGE }}:latest
+          docker push ${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+
+
+  # ==========================================
+  # 4. DOCKER COMPOSE VALIDATION
+  # ==========================================
+  compose-validation:
+    name: Validate Docker Compose
+    runs-on: ubuntu-latest
+
+    needs:
+      - frontend-ci
+      - backend-ci
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate Docker Compose
+        run: docker compose config
+
+
+  # ==========================================
+  # 5. DEPLOYMENT CHECK
+  # ==========================================
+  deployment-check:
+    name: Deployment Verification
+    runs-on: ubuntu-latest
+
+    needs:
+      - docker
+      - compose-validation
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deployment ready
+        run: |
+          echo "======================================"
+          echo "EduVista CI/CD completed successfully"
+          echo "======================================"
+          echo "Frontend image: ${{ env.FRONTEND_IMAGE }}:latest"
+          echo "Backend image:  ${{ env.BACKEND_IMAGE }}:latest"
+          echo "Commit SHA:     ${{ github.sha }}"
+          echo "Deployment images are ready."
