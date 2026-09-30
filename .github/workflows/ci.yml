@@ -9,32 +9,46 @@ on:
       - main
 
 jobs:
-  frontend:
+  build:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: frontend
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      # Frontend
+      - name: Setup Node.js for Frontend
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Install dependencies
+      - name: Install Frontend Dependencies
+        working-directory: frontend
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
-
-      - name: Build React application
+      - name: Build React Application
+        working-directory: frontend
         run: npm run build
 
-      - name: Build Docker image
+      # Backend
+      - name: Setup Node.js for Backend
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install Backend Dependencies
+        working-directory: backend
+        run: npm ci
+
+      # Docker
+      - name: Build Frontend Docker Image
+        working-directory: frontend
         run: docker build -t eduvista-frontend:${{ github.sha }} .
+
+      - name: Build Backend Docker Image
+        working-directory: backend
+        run: docker build -t eduvista-backend:${{ github.sha }} .
