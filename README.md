@@ -1,130 +1,142 @@
-# 🎓 EduVista — School Management System
+# 🎓 EduVista School Management System
 
-> A full-stack school management system built with React, Node.js, Express, MongoDB and Docker, with automated CI/CD using GitHub Actions and Docker Hub.
+> A modern full-stack school management platform built with **React, Node.js, Express, MongoDB, Docker, Docker Compose, GitHub Actions, and Docker Hub**.
 
-EduVista is a modern school management web application designed to manage students, teachers, admissions, notices, schedules and fee-related operations through a user-friendly interface.
+EduVista is a full-stack school management application designed to provide a modern school website along with administrative functionality for managing admissions, students, teachers, notices, schedules, and fees.
 
-The project is containerized using Docker and includes a complete CI/CD workflow that automatically builds and publishes Docker images to Docker Hub.
-
----
-
-## ✨ Features
-
-### 🌐 Public Website
-
-- 🏠 Modern school homepage
-- 📖 About School
-- 🎓 Academics
-- 👨‍🏫 Faculty information
-- 🏫 Facilities
-- 📅 Events
-- 🖼️ Gallery
-- 📢 Notices
-- 📝 Online Admissions
-- 📞 Contact section
-- 💰 Fees information
-- 📆 School Calendar
-
-### 🔐 Admin Panel
-
-- 🔑 Secure admin login
-- 📊 Admin dashboard
-- 👨‍🎓 Student management
-- 👨‍🏫 Teacher management
-- 📝 Admission management
-- 📢 Notice management
-- 📅 Schedule management
-- 💰 Fee management
-- ✏️ Edit student details
-- ✏️ Edit teacher details
-- 👤 Student details
-- 👤 Teacher details
-- 🛡️ Protected admin routes
-- 🔐 JWT-based authentication
+The project was developed locally first and then containerized and automated with a complete **Docker-based CI/CD workflow**.
 
 ---
 
-## 🛠️ Technology Stack
+## 🌐 Project Overview
 
-### Frontend
+EduVista provides two major parts:
 
-- React 19
-- Vite
-- React Router
-- CSS
-- Nginx
+### 🏫 Public School Website
 
-### Backend
+* Home page
+* About school
+* Academics
+* Faculty
+* Facilities
+* Events
+* Gallery
+* Notices
+* School calendar
+* Contact
+* Online admission form
 
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JWT
-- bcryptjs
-- CORS
-- dotenv
+### 🔐 Admin Management System
 
-### DevOps
-
-- Git
-- GitHub
-- GitHub Actions
-- Docker
-- Docker Compose
-- Docker Hub
-- Nginx
+* Admin authentication
+* Dashboard
+* Admission management
+* Student management
+* Teacher management
+* Notice management
+* Schedule management
+* Fee management
+* Student/teacher details
+* Add and edit records
+* Protected admin routes
 
 ---
 
-## 🏗️ Project Architecture
+## 🏗️ Architecture
 
 ```text
-                         ┌─────────────────────┐
-                         │      GitHub         │
-                         │   Source Repository │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │   GitHub Actions    │
-                         │      CI / CD        │
-                         └──────────┬──────────┘
-                                    │
-                         ┌──────────▼──────────┐
-                         │      Docker Hub      │
-                         │                     │
-                         │ Frontend Image      │
-                         │ Backend Image       │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-              ┌────────────────────────────────────────┐
-              │             Docker Compose              │
-              │                                        │
-              │   ┌──────────────┐                     │
-              │   │   Frontend   │                     │
-              │   │ React + Nginx│                     │
-              │   │   :8080      │                     │
-              │   └──────┬───────┘                     │
-              │          │                             │
-              │          ▼                             │
-              │   ┌──────────────┐                     │
-              │   │   Backend    │                     │
-              │   │Node + Express│                     │
-              │   │   :5001      │                     │
-              │   └──────┬───────┘                     │
-              │          │                             │
-              │          ▼                             │
-              │   ┌──────────────┐                     │
-              │   │   MongoDB    │                     │
-              │   │    :27017    │                     │
-              │   └──────────────┘                     │
-              │                                        │
-              └────────────────────────────────────────┘
+                    ┌──────────────────────┐
+                    │      GitHub Repo     │
+                    │   EduVista Project   │
+                    └──────────┬───────────┘
+                               │
+                               │ Push to main
+                               ▼
+                    ┌──────────────────────┐
+                    │    GitHub Actions    │
+                    │      CI / CD         │
+                    └──────────┬───────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+              ▼                ▼                ▼
+        Frontend CI      Backend CI       Docker Build
+              │                │                │
+              └────────────────┼────────────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │      Docker Hub      │
+                    │                      │
+                    │ eduvista-frontend    │
+                    │ eduvista-backend     │
+                    └──────────┬───────────┘
+                               │
+                               │ docker compose pull
+                               ▼
+             ┌─────────────────────────────────────┐
+             │          Local Docker Host           │
+             │                                     │
+             │  ┌────────────┐                     │
+             │  │  Frontend  │ :8080              │
+             │  │   Nginx    │                     │
+             │  └─────┬──────┘                     │
+             │        │                            │
+             │  ┌─────▼──────┐                     │
+             │  │  Backend   │ :5001              │
+             │  │ Node/Express│                    │
+             │  └─────┬──────┘                     │
+             │        │                            │
+             │  ┌─────▼──────┐                     │
+             │  │  MongoDB   │ :27017             │
+             │  │   Mongo 8  │                     │
+             │  └────────────┘                     │
+             │                                     │
+             └─────────────────────────────────────┘
+```
 
+---
 
+# 🛠️ Technology Stack
 
+## Frontend
+
+* React 19
+* React Router
+* Vite
+* Oxlint
+* Nginx
+* JavaScript / JSX
+* CSS
+
+## Backend
+
+* Node.js 22
+* Express 5
+* MongoDB
+* Mongoose
+* JWT Authentication
+* bcryptjs
+* CORS
+* dotenv
+
+## DevOps
+
+* Git
+* GitHub
+* GitHub Actions
+* Docker
+* Docker Compose
+* Docker Hub
+* Nginx
+* Linux / Ubuntu
+* CI/CD
+
+---
+
+# 📁 Project Structure
+
+```text
 school-management/
 │
 ├── .github/
@@ -157,6 +169,8 @@ school-management/
 │   │   ├── createAdmin.js
 │   │   └── server.js
 │   │
+│   ├── .dockerignore
+│   ├── .gitignore
 │   ├── Dockerfile
 │   ├── package.json
 │   └── package-lock.json
@@ -171,344 +185,476 @@ school-management/
 │   │   ├── index.css
 │   │   └── main.jsx
 │   │
+│   ├── .dockerignore
+│   ├── .gitignore
 │   ├── Dockerfile
+│   ├── index.html
 │   ├── package.json
-│   ├── package-lock.json
 │   └── vite.config.js
 │
-├── .gitignore
 ├── docker-compose.yml
+├── .gitignore
 └── README.md
+```
 
+---
 
+# 🐳 Docker Architecture
 
-🐳 Docker Setup
 EduVista runs as three Docker services:
+
 | Service  | Technology        |    Port |
 | -------- | ----------------- | ------: |
 | Frontend | React + Nginx     |  `8080` |
 | Backend  | Node.js + Express |  `5001` |
-| Database | MongoDB 8         | `27017` |
+| MongoDB  | MongoDB 8         | `27017` |
 
-
-Docker Network
 All services communicate through a dedicated Docker bridge network:
 
+```text
 eduvista-network
+```
 
-Backend connects to MongoDB using the Docker service name:
+MongoDB data is persisted using a Docker named volume:
 
-mongodb://mongodb:27017/eduvista
+```text
+eduvista_mongodb_data
+```
 
-🚀 Run the Project Locally
-1. Clone Repository
+This means removing the MongoDB container does not automatically remove the database volume.
+
+---
+
+# 🚀 Run the Project Locally
+
+## 1. Clone the repository
+
+```bash
 git clone https://github.com/mannu-0/eduvista-school-management.git
 cd eduvista-school-management
-2. Start All Services
-docker compose pull
+```
+
+## 2. Start the complete application
+
+```bash
 docker compose up -d
-3. Check Containers
+```
+
+Check running containers:
+
+```bash
 docker compose ps
+```
 
 Expected services:
 
+```text
 eduvista-frontend
 eduvista-backend
 eduvista-mongodb
-4. Check Backend Health
-curl http://localhost:5001/api/health
+```
 
-Expected response:
+---
 
+# 🌐 Application URLs
+
+### Frontend
+
+```text
+http://localhost:8080
+```
+
+### Backend
+
+```text
+http://localhost:5001
+```
+
+### Backend Health Check
+
+```text
+http://localhost:5001/api/health
+```
+
+Example response:
+
+```json
 {
   "status": "OK",
   "service": "EduVista Backend"
 }
-5. Open Application
+```
 
-Frontend:
+---
 
-http://localhost:8080
+# 🔐 Admin Authentication
 
-Backend:
+Admin authentication is handled by the backend using:
 
-http://localhost:5001
-🔐 Admin Setup
+* JWT
+* bcrypt password hashing
+* Protected routes
+* MongoDB-based admin records
 
-The project includes a script for creating the admin account.
+To create an admin inside the running backend container:
 
-Run:
-
+```bash
 docker compose exec backend node src/createAdmin.js
+```
 
-The script creates an admin account if one does not already exist.
+The application should then allow login through the admin login page.
 
-Do not commit production passwords or secrets to GitHub. Use environment variables or Docker secrets for production deployments.
+> **Security:** Never commit real credentials, JWT secrets, or production environment variables to GitHub.
 
-🔑 Environment Variables
+---
 
-Backend uses the following environment variables:
+# ⚙️ Environment Variables
 
+Backend configuration uses environment variables such as:
+
+```env
 PORT=5001
 MONGO_URI=mongodb://mongodb:27017/eduvista
 JWT_SECRET=your_secure_secret
+```
 
-For local development outside Docker, MongoDB can use a local connection such as:
+The actual `.env` file is excluded from Git using `.gitignore`.
 
-MONGO_URI=mongodb://localhost:27018/eduvista
-🔄 CI/CD Pipeline
+---
 
-EduVista uses GitHub Actions for automated CI/CD.
+# 🔄 CI/CD Pipeline
 
-Every push to the main branch triggers the workflow.
+The project uses **GitHub Actions** to automate the development and deployment workflow.
 
-Pipeline
-Developer
-    │
-    ▼
+Every push to the `main` branch triggers the pipeline.
+
+## Pipeline Flow
+
+```text
 Git Push
-    │
-    ▼
-GitHub Repository
-    │
-    ▼
-GitHub Actions
-    │
-    ├── Frontend CI
-    │      ├── Checkout
-    │      ├── Setup Node.js
-    │      ├── npm ci
-    │      └── npm run build
-    │
-    ├── Backend CI
-    │      ├── Checkout
-    │      ├── Setup Node.js
-    │      ├── npm ci
-    │      └── Node syntax check
-    │
-    ├── Docker Build
-    │      ├── Build Frontend Image
-    │      └── Build Backend Image
-    │
-    ├── Docker Hub Push
-    │      ├── Frontend Image
-    │      └── Backend Image
-    │
-    └── Compose Validation
-           │
-           ▼
-       Deployment Ready
-🐳 Docker Images
+   │
+   ▼
+Frontend CI
+   │
+   ├── npm ci
+   └── npm run build
+   │
+   ▼
+Backend CI
+   │
+   ├── npm ci
+   └── Node.js verification
+   │
+   ▼
+Docker Build
+   │
+   ├── Build Frontend Image
+   └── Build Backend Image
+   │
+   ▼
+Docker Hub
+   │
+   ├── eduvista-frontend
+   └── eduvista-backend
+   │
+   ▼
+Docker Compose
+   │
+   └── Pull latest images
+```
 
-Docker images are published to Docker Hub.
+---
 
-Frontend
+# 🐋 Docker Images
+
+The project publishes separate Docker images for frontend and backend.
+
+### Frontend
+
+```text
 mannu0/eduvista-frontend
-Backend
+```
+
+### Backend
+
+```text
 mannu0/eduvista-backend
+```
 
 Images are tagged with:
 
+```text
 latest
+```
 
-and the GitHub commit SHA for version tracking.
+and the Git commit SHA for version tracking.
 
-🔧 Useful Docker Commands
-Start services
+---
+
+# 🔧 Docker Commands
+
+### Build images locally
+
+```bash
+docker compose build
+```
+
+### Start containers
+
+```bash
 docker compose up -d
-Stop services
+```
+
+### Stop containers
+
+```bash
 docker compose down
-View running containers
-docker compose ps
-View logs
+```
+
+### View logs
+
+```bash
 docker compose logs
-Backend logs
+```
+
+Backend logs:
+
+```bash
 docker compose logs backend
-Frontend logs
+```
+
+Frontend logs:
+
+```bash
 docker compose logs frontend
-MongoDB logs
+```
+
+MongoDB logs:
+
+```bash
 docker compose logs mongodb
-Follow backend logs
-docker compose logs -f backend
-Pull latest images
+```
+
+### Pull latest Docker Hub images
+
+```bash
 docker compose pull
-Restart services
-docker compose restart
-🧪 API Health Checks
-Backend Health
-GET /api/health
+```
 
-Example:
+### Restart the complete application
 
+```bash
+docker compose down
+docker compose pull
+docker compose up -d
+```
+
+### Check container status
+
+```bash
+docker compose ps
+```
+
+---
+
+# ❤️ Health Checks
+
+The application includes container health monitoring for the critical services.
+
+MongoDB:
+
+```bash
+docker inspect --format='{{.State.Health.Status}}' eduvista-mongodb
+```
+
+Backend:
+
+```bash
+docker inspect --format='{{.State.Health.Status}}' eduvista-backend
+```
+
+Backend API:
+
+```bash
 curl http://localhost:5001/api/health
-Schedule API
-GET /api/schedules
+```
 
-Example:
+---
 
-curl http://localhost:5001/api/schedules
-🔐 Authentication
-
-Admin authentication uses:
-
-JWT
-bcrypt password hashing
-Protected routes
-Token-based authorization
-
-Authentication flow:
-
-Admin Login
-     │
-     ▼
-POST /api/admin/login
-     │
-     ▼
-Validate Username
-     │
-     ▼
-Verify Password
-     │
-     ▼
-Generate JWT
-     │
-     ▼
-Frontend Stores Token
-     │
-     ▼
-Protected Admin Routes
-📦 Dockerfile Strategy
-Frontend
-
-Frontend uses a multi-stage Docker build:
-
-Node.js
-   │
-   ├── Install dependencies
-   ├── Build React application
-   │
-   ▼
-Nginx Alpine
-   │
-   └── Serve production build
-
-This keeps the production frontend container lightweight.
-
-Backend
-
-Backend uses:
-
-Node.js 22 Alpine
-        │
-        ├── Install production dependencies
-        ├── Copy source code
-        └── Start Express server
-💾 Persistent Database Storage
+# 🗄️ MongoDB Persistence
 
 MongoDB uses a Docker named volume:
 
+```text
 eduvista_mongodb_data
+```
 
-MongoDB data is stored at:
+The volume is mounted at:
 
+```text
 /data/db
+```
 
-This allows database data to persist even when the MongoDB container is recreated.
+This allows database data to survive container recreation.
 
-🛡️ Production Considerations
+To view volumes:
 
-For a real production deployment, the following improvements can be added:
+```bash
+docker volume ls
+```
 
-HTTPS / TLS
-Secure JWT secret management
-Docker secrets
-Reverse proxy
-Domain configuration
-Automated backups
-Monitoring
-Log management
-Resource limits
-Health monitoring
-Cloud deployment
-📌 Current DevOps Implementation
+---
 
-This project currently demonstrates:
+# 🔒 Security Considerations
 
+The project follows basic container and application security practices:
+
+* `.env` excluded from Git
+* `node_modules` excluded from Git
+* Backend production image installs production dependencies only
+* Admin passwords are hashed with bcrypt
+* JWT-based authentication
+* Protected admin routes
+* Separate Docker services
+* Dedicated Docker network
+* Persistent MongoDB volume
+* Docker Hub credentials stored as GitHub Secrets
+
+For production deployment, additional security should be configured, including:
+
+* HTTPS/TLS
+* Strong JWT secrets
+* Secure database credentials
+* Reverse proxy configuration
+* Firewall rules
+* Production MongoDB configuration
+* Secret management
+* Monitoring and logging
+
+---
+
+# 📊 DevOps Workflow
+
+This project demonstrates a practical DevOps workflow:
+
+```text
+Develop
+   ↓
 Git
- │
- ▼
+   ↓
 GitHub
- │
- ▼
+   ↓
 GitHub Actions
- │
- ├── Frontend Build
- ├── Backend Validation
- ├── Docker Build
- ├── Docker Image Tagging
- ├── Docker Hub Push
- └── Docker Compose Validation
- │
- ▼
+   ↓
+Build & Test
+   ↓
+Docker Build
+   ↓
 Docker Hub
- │
- ▼
+   ↓
 Docker Compose
- │
- ├── React + Nginx
- ├── Node.js + Express
- └── MongoDB
-🎯 Project Objective
+   ↓
+Running Application
+```
 
-The main objective of EduVista is to build a practical full-stack application while implementing real-world DevOps practices such as:
+---
 
-Containerization
-Multi-container application deployment
-Docker networking
-Persistent storage
-CI/CD automation
-Docker image management
-Git-based version control
-Automated builds
-Health checks
-Production-oriented deployment structure
-📸 Project Status
-Application
+# 🧪 Verification
 
-Status: ✅ Completed
+After deployment, verify the stack:
 
-Docker
+```bash
+docker compose ps
+```
 
-Status: ✅ Containerized
+Then check:
 
-Docker Compose
+```bash
+curl http://localhost:5001/api/health
+```
 
-Status: ✅ Configured
+and open:
 
-CI/CD
+```text
+http://localhost:8080
+```
 
-Status: ✅ GitHub Actions configured
+---
 
-Docker Hub
+# 📌 Current Project Scope
 
-Status: ✅ Images published
+The current project intentionally focuses on:
 
-Kubernetes
+* Full-stack school management application
+* Docker containerization
+* Docker Compose orchestration
+* GitHub Actions CI/CD
+* Docker Hub image publishing
+* Local deployment and verification
 
-Status: ⏸️ Not included in the current project
+**Kubernetes is not included in the current implementation.**
 
-👨‍💻 Author
+---
 
-Manish Saini
+# 🎯 Key DevOps Concepts Demonstrated
+
+Through this project, the following concepts are implemented:
+
+* Linux application deployment
+* Git & GitHub
+* GitHub Actions
+* CI/CD pipelines
+* Docker multi-stage builds
+* Docker image management
+* Docker Hub
+* Docker Compose
+* Container networking
+* Container health checks
+* Persistent Docker volumes
+* Environment variables
+* Service dependencies
+* Node.js production containers
+* Nginx-based frontend serving
+* Backend containerization
+* Database containerization
+
+---
+
+# 🚀 Future Improvements
+
+Possible future improvements include:
+
+* Production cloud deployment
+* HTTPS with a custom domain
+* Centralized logging
+* Prometheus & Grafana monitoring
+* Automated backups
+* Infrastructure as Code
+* Cloud deployment
+* Kubernetes deployment
+* Advanced security and secret management
+
+---
+
+# 👨‍💻 Author
+
+**Manish Saini**
 
 DevOps / Cloud Enthusiast
 
-GitHub: mannu-0
-LinkedIn: Manish Saini
-⭐ Support
+📍 Jaipur, Rajasthan, India
 
-If you found this project useful, consider giving the repository a ⭐ on GitHub.
+GitHub:
+https://github.com/mannu-0
 
-📄 License
+LinkedIn:
+https://linkedin.com/in/manish-saini-devops/
 
-This project is created for learning, portfolio and demonstration purposes.
+---
+
+## ⭐ Project
+
+If you find this project useful, consider giving the repository a ⭐ on GitHub.
+
+**EduVista — Building Futures, Inspiring Minds.**
+
